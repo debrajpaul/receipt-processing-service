@@ -18,7 +18,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::333208197562:role/cdk-hnb659fds-deploy-role-333208197562-ap-south-1",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::333208197562:role/cdk-hnb659fds-cfn-exec-role-333208197562-ap-south-1",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-333208197562-ap-south-1/b4b9f4ee618a174bb7f7dd37c47d726e412574fc01a04837557c2b90721d9676.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-333208197562-ap-south-1/74e3e1842d82ceb701fda29bb3aea3f82a3f7f3dade1d377d95106cd15afc2b3.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -34,6 +34,24 @@
         "InfraCdkStack.assets"
       ],
       "metadata": {
+        "/InfraCdkStack/OpsAlertsTopic/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "OpsAlertsTopicF77DA89B"
+          }
+        ],
+        "/InfraCdkStack/OpsAlertsTopic/pauldebraj7@gmail.com/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "OpsAlertsTopicpauldebraj7gmailcomD9AF7B3E"
+          }
+        ],
+        "/InfraCdkStack/OpsAlertsTopicPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "OpsAlertsTopicPolicyDD649D9F"
+          }
+        ],
         "/InfraCdkStack/AutomatedReceiptsBucket/Resource": [
           {
             "type": "aws:cdk:logicalId",
@@ -70,6 +88,152 @@
             "data": "ReceiptsQueuePolicyBD8BC66D"
           }
         ],
+        "/InfraCdkStack/ReceiptsTable": [
+          {
+            "type": "aws:cdk:hasPhysicalName",
+            "data": {
+              "Ref": "ReceiptsTable036B344A"
+            }
+          }
+        ],
+        "/InfraCdkStack/ReceiptsTable/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ReceiptsTable036B344A"
+          }
+        ],
+        "/InfraCdkStack/WorkerVpc/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WorkerVpcA12AC6F9"
+          }
+        ],
+        "/InfraCdkStack/WorkerVpc/PublicSubnet1/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WorkerVpcPublicSubnet1Subnet549B8620"
+          }
+        ],
+        "/InfraCdkStack/WorkerVpc/PublicSubnet1/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WorkerVpcPublicSubnet1RouteTable64D1002B"
+          }
+        ],
+        "/InfraCdkStack/WorkerVpc/PublicSubnet1/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WorkerVpcPublicSubnet1RouteTableAssociation1C13947A"
+          }
+        ],
+        "/InfraCdkStack/WorkerVpc/PublicSubnet1/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WorkerVpcPublicSubnet1DefaultRoute52FDC25E"
+          }
+        ],
+        "/InfraCdkStack/WorkerVpc/PublicSubnet2/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WorkerVpcPublicSubnet2Subnet4C3F610E"
+          }
+        ],
+        "/InfraCdkStack/WorkerVpc/PublicSubnet2/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WorkerVpcPublicSubnet2RouteTableAB97C578"
+          }
+        ],
+        "/InfraCdkStack/WorkerVpc/PublicSubnet2/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WorkerVpcPublicSubnet2RouteTableAssociation7CE29543"
+          }
+        ],
+        "/InfraCdkStack/WorkerVpc/PublicSubnet2/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WorkerVpcPublicSubnet2DefaultRoute7351E087"
+          }
+        ],
+        "/InfraCdkStack/WorkerVpc/IGW": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WorkerVpcIGWC2B94A1A"
+          }
+        ],
+        "/InfraCdkStack/WorkerVpc/VPCGW": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WorkerVpcVPCGWDDC7E69B"
+          }
+        ],
+        "/InfraCdkStack/WorkerSecurityGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WorkerSecurityGroup5529CF0B"
+          }
+        ],
+        "/InfraCdkStack/WorkerCluster/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WorkerClusterB2BB5BD9"
+          }
+        ],
+        "/InfraCdkStack/WorkerLogGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WorkerLogGroup31FDBE4A"
+          }
+        ],
+        "/InfraCdkStack/WorkerTaskDefinition/TaskRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WorkerTaskDefinitionTaskRoleA8028804"
+          }
+        ],
+        "/InfraCdkStack/WorkerTaskDefinition/TaskRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WorkerTaskDefinitionTaskRoleDefaultPolicyEAEEDD06"
+          }
+        ],
+        "/InfraCdkStack/WorkerTaskDefinition/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WorkerTaskDefinition8AD2CCFF"
+          }
+        ],
+        "/InfraCdkStack/WorkerTaskDefinition/ExecutionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WorkerTaskDefinitionExecutionRole8F38446C"
+          }
+        ],
+        "/InfraCdkStack/WorkerTaskDefinition/ExecutionRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WorkerTaskDefinitionExecutionRoleDefaultPolicy849552D7"
+          }
+        ],
+        "/InfraCdkStack/WorkerService/Service": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WorkerService99815FA9"
+          }
+        ],
+        "/InfraCdkStack/WorkerService/TaskCount/Target/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WorkerServiceTaskCountTarget94398C8F"
+          }
+        ],
+        "/InfraCdkStack/WorkerService/TaskCount/Target/SqsBacklogTargetTracking/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WorkerServiceTaskCountTargetSqsBacklogTargetTrackingD2F40976"
+          }
+        ],
         "/InfraCdkStack/BucketNotificationsHandler050a0587b7544547bf325f094a3db834/Role/Resource": [
           {
             "type": "aws:cdk:logicalId",
@@ -88,18 +252,28 @@
             "data": "BucketNotificationsHandler050a0587b7544547bf325f094a3db8347ECC3691"
           }
         ],
-        "/InfraCdkStack/ReceiptsTable": [
-          {
-            "type": "aws:cdk:hasPhysicalName",
-            "data": {
-              "Ref": "ReceiptsTable036B344A"
-            }
-          }
-        ],
-        "/InfraCdkStack/ReceiptsTable/Resource": [
+        "/InfraCdkStack/WorkerErrorMetricFilter/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "ReceiptsTable036B344A"
+            "data": "WorkerErrorMetricFilter57E8A219"
+          }
+        ],
+        "/InfraCdkStack/ReceiptsQueueBacklogAlarm/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ReceiptsQueueBacklogAlarmD9AA2EC3"
+          }
+        ],
+        "/InfraCdkStack/WorkerErrorAlarm/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WorkerErrorAlarmAEED4951"
+          }
+        ],
+        "/InfraCdkStack/ReceiptsBudget": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ReceiptsBudget"
           }
         ],
         "/InfraCdkStack/ReceiptsBucketNameOutput": [
