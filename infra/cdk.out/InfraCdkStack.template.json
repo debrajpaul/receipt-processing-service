@@ -1,5 +1,57 @@
 {
  "Resources": {
+  "OpsAlertsTopicF77DA89B": {
+   "Type": "AWS::SNS::Topic",
+   "Properties": {
+    "DisplayName": "Operations Alerts",
+    "TopicName": "ops-alerts"
+   },
+   "Metadata": {
+    "aws:cdk:path": "InfraCdkStack/OpsAlertsTopic/Resource"
+   }
+  },
+  "OpsAlertsTopicpauldebraj7gmailcomD9AF7B3E": {
+   "Type": "AWS::SNS::Subscription",
+   "Properties": {
+    "Endpoint": "pauldebraj7@gmail.com",
+    "Protocol": "email",
+    "TopicArn": {
+     "Ref": "OpsAlertsTopicF77DA89B"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "InfraCdkStack/OpsAlertsTopic/pauldebraj7@gmail.com/Resource"
+   }
+  },
+  "OpsAlertsTopicPolicyDD649D9F": {
+   "Type": "AWS::SNS::TopicPolicy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sns:Publish",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "budgets.amazonaws.com"
+       },
+       "Resource": {
+        "Ref": "OpsAlertsTopicF77DA89B"
+       },
+       "Sid": "0"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "Topics": [
+     {
+      "Ref": "OpsAlertsTopicF77DA89B"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "InfraCdkStack/OpsAlertsTopicPolicy/Resource"
+   }
+  },
   "AutomatedReceiptsBucketF072455A": {
    "Type": "AWS::S3::Bucket",
    "Properties": {
@@ -231,6 +283,654 @@
     "aws:cdk:path": "InfraCdkStack/ReceiptsQueue/Policy/Resource"
    }
   },
+  "ReceiptsTable036B344A": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "receipt_id",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "date",
+      "AttributeType": "S"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "KeySchema": [
+     {
+      "AttributeName": "receipt_id",
+      "KeyType": "HASH"
+     },
+     {
+      "AttributeName": "date",
+      "KeyType": "RANGE"
+     }
+    ],
+    "TableName": "Receipts"
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "InfraCdkStack/ReceiptsTable/Resource"
+   }
+  },
+  "WorkerVpcA12AC6F9": {
+   "Type": "AWS::EC2::VPC",
+   "Properties": {
+    "CidrBlock": "10.0.0.0/16",
+    "EnableDnsHostnames": true,
+    "EnableDnsSupport": true,
+    "InstanceTenancy": "default",
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "InfraCdkStack/WorkerVpc"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "InfraCdkStack/WorkerVpc/Resource"
+   }
+  },
+  "WorkerVpcPublicSubnet1Subnet549B8620": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "AvailabilityZone": "ap-south-1a",
+    "CidrBlock": "10.0.0.0/17",
+    "MapPublicIpOnLaunch": true,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "Public"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Public"
+     },
+     {
+      "Key": "Name",
+      "Value": "InfraCdkStack/WorkerVpc/PublicSubnet1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "WorkerVpcA12AC6F9"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "InfraCdkStack/WorkerVpc/PublicSubnet1/Subnet"
+   }
+  },
+  "WorkerVpcPublicSubnet1RouteTable64D1002B": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "InfraCdkStack/WorkerVpc/PublicSubnet1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "WorkerVpcA12AC6F9"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "InfraCdkStack/WorkerVpc/PublicSubnet1/RouteTable"
+   }
+  },
+  "WorkerVpcPublicSubnet1RouteTableAssociation1C13947A": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "WorkerVpcPublicSubnet1RouteTable64D1002B"
+    },
+    "SubnetId": {
+     "Ref": "WorkerVpcPublicSubnet1Subnet549B8620"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "InfraCdkStack/WorkerVpc/PublicSubnet1/RouteTableAssociation"
+   }
+  },
+  "WorkerVpcPublicSubnet1DefaultRoute52FDC25E": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "GatewayId": {
+     "Ref": "WorkerVpcIGWC2B94A1A"
+    },
+    "RouteTableId": {
+     "Ref": "WorkerVpcPublicSubnet1RouteTable64D1002B"
+    }
+   },
+   "DependsOn": [
+    "WorkerVpcVPCGWDDC7E69B"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "InfraCdkStack/WorkerVpc/PublicSubnet1/DefaultRoute"
+   }
+  },
+  "WorkerVpcPublicSubnet2Subnet4C3F610E": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "AvailabilityZone": "ap-south-1b",
+    "CidrBlock": "10.0.128.0/17",
+    "MapPublicIpOnLaunch": true,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "Public"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Public"
+     },
+     {
+      "Key": "Name",
+      "Value": "InfraCdkStack/WorkerVpc/PublicSubnet2"
+     }
+    ],
+    "VpcId": {
+     "Ref": "WorkerVpcA12AC6F9"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "InfraCdkStack/WorkerVpc/PublicSubnet2/Subnet"
+   }
+  },
+  "WorkerVpcPublicSubnet2RouteTableAB97C578": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "InfraCdkStack/WorkerVpc/PublicSubnet2"
+     }
+    ],
+    "VpcId": {
+     "Ref": "WorkerVpcA12AC6F9"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "InfraCdkStack/WorkerVpc/PublicSubnet2/RouteTable"
+   }
+  },
+  "WorkerVpcPublicSubnet2RouteTableAssociation7CE29543": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "WorkerVpcPublicSubnet2RouteTableAB97C578"
+    },
+    "SubnetId": {
+     "Ref": "WorkerVpcPublicSubnet2Subnet4C3F610E"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "InfraCdkStack/WorkerVpc/PublicSubnet2/RouteTableAssociation"
+   }
+  },
+  "WorkerVpcPublicSubnet2DefaultRoute7351E087": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "GatewayId": {
+     "Ref": "WorkerVpcIGWC2B94A1A"
+    },
+    "RouteTableId": {
+     "Ref": "WorkerVpcPublicSubnet2RouteTableAB97C578"
+    }
+   },
+   "DependsOn": [
+    "WorkerVpcVPCGWDDC7E69B"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "InfraCdkStack/WorkerVpc/PublicSubnet2/DefaultRoute"
+   }
+  },
+  "WorkerVpcIGWC2B94A1A": {
+   "Type": "AWS::EC2::InternetGateway",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "InfraCdkStack/WorkerVpc"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "InfraCdkStack/WorkerVpc/IGW"
+   }
+  },
+  "WorkerVpcVPCGWDDC7E69B": {
+   "Type": "AWS::EC2::VPCGatewayAttachment",
+   "Properties": {
+    "InternetGatewayId": {
+     "Ref": "WorkerVpcIGWC2B94A1A"
+    },
+    "VpcId": {
+     "Ref": "WorkerVpcA12AC6F9"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "InfraCdkStack/WorkerVpc/VPCGW"
+   }
+  },
+  "WorkerSecurityGroup5529CF0B": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "Security group for the receipt worker service",
+    "SecurityGroupEgress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow all outbound traffic by default",
+      "IpProtocol": "-1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "WorkerVpcA12AC6F9"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "InfraCdkStack/WorkerSecurityGroup/Resource"
+   }
+  },
+  "WorkerClusterB2BB5BD9": {
+   "Type": "AWS::ECS::Cluster",
+   "Properties": {
+    "ClusterName": "receipt-worker-cluster"
+   },
+   "Metadata": {
+    "aws:cdk:path": "InfraCdkStack/WorkerCluster/Resource"
+   }
+  },
+  "WorkerLogGroup31FDBE4A": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "LogGroupName": "/aws/ecs/receipt-worker",
+    "RetentionInDays": 30
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "InfraCdkStack/WorkerLogGroup/Resource"
+   }
+  },
+  "WorkerTaskDefinitionTaskRoleA8028804": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "InfraCdkStack/WorkerTaskDefinition/TaskRole/Resource"
+   }
+  },
+  "WorkerTaskDefinitionTaskRoleDefaultPolicyEAEEDD06": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "sqs:ReceiveMessage",
+        "sqs:ChangeMessageVisibility",
+        "sqs:GetQueueUrl",
+        "sqs:DeleteMessage",
+        "sqs:GetQueueAttributes"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "ReceiptsQueue30E2F02B",
+         "Arn"
+        ]
+       }
+      },
+      {
+       "Action": [
+        "s3:GetObject*",
+        "s3:GetBucket*",
+        "s3:List*",
+        "s3:DeleteObject*",
+        "s3:PutObject",
+        "s3:PutObjectLegalHold",
+        "s3:PutObjectRetention",
+        "s3:PutObjectTagging",
+        "s3:PutObjectVersionTagging",
+        "s3:Abort*"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "AutomatedReceiptsBucketF072455A",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "AutomatedReceiptsBucketF072455A",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:Query",
+        "dynamodb:GetItem",
+        "dynamodb:Scan",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:PutItem",
+        "dynamodb:UpdateItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "ReceiptsTable036B344A",
+          "Arn"
+         ]
+        },
+        {
+         "Ref": "AWS::NoValue"
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "WorkerTaskDefinitionTaskRoleDefaultPolicyEAEEDD06",
+    "Roles": [
+     {
+      "Ref": "WorkerTaskDefinitionTaskRoleA8028804"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "InfraCdkStack/WorkerTaskDefinition/TaskRole/DefaultPolicy/Resource"
+   }
+  },
+  "WorkerTaskDefinition8AD2CCFF": {
+   "Type": "AWS::ECS::TaskDefinition",
+   "Properties": {
+    "ContainerDefinitions": [
+     {
+      "Environment": [
+       {
+        "Name": "RECEIPTS_QUEUE_URL",
+        "Value": {
+         "Ref": "ReceiptsQueue30E2F02B"
+        }
+       },
+       {
+        "Name": "RECEIPTS_TABLE_NAME",
+        "Value": {
+         "Ref": "ReceiptsTable036B344A"
+        }
+       },
+       {
+        "Name": "RECEIPTS_BUCKET_NAME",
+        "Value": {
+         "Ref": "AutomatedReceiptsBucketF072455A"
+        }
+       }
+      ],
+      "Essential": true,
+      "Image": "public.ecr.aws/docker/library/node:18-alpine",
+      "LogConfiguration": {
+       "LogDriver": "awslogs",
+       "Options": {
+        "awslogs-group": {
+         "Ref": "WorkerLogGroup31FDBE4A"
+        },
+        "awslogs-stream-prefix": "worker",
+        "awslogs-region": "ap-south-1"
+       }
+      },
+      "Name": "receipt-worker",
+      "PortMappings": [
+       {
+        "ContainerPort": 8080,
+        "Protocol": "tcp"
+       }
+      ]
+     }
+    ],
+    "Cpu": "512",
+    "ExecutionRoleArn": {
+     "Fn::GetAtt": [
+      "WorkerTaskDefinitionExecutionRole8F38446C",
+      "Arn"
+     ]
+    },
+    "Family": "InfraCdkStackWorkerTaskDefinition794769B3",
+    "Memory": "1024",
+    "NetworkMode": "awsvpc",
+    "RequiresCompatibilities": [
+     "FARGATE"
+    ],
+    "TaskRoleArn": {
+     "Fn::GetAtt": [
+      "WorkerTaskDefinitionTaskRoleA8028804",
+      "Arn"
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "InfraCdkStack/WorkerTaskDefinition/Resource"
+   }
+  },
+  "WorkerTaskDefinitionExecutionRole8F38446C": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "InfraCdkStack/WorkerTaskDefinition/ExecutionRole/Resource"
+   }
+  },
+  "WorkerTaskDefinitionExecutionRoleDefaultPolicy849552D7": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "WorkerLogGroup31FDBE4A",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "WorkerTaskDefinitionExecutionRoleDefaultPolicy849552D7",
+    "Roles": [
+     {
+      "Ref": "WorkerTaskDefinitionExecutionRole8F38446C"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "InfraCdkStack/WorkerTaskDefinition/ExecutionRole/DefaultPolicy/Resource"
+   }
+  },
+  "WorkerService99815FA9": {
+   "Type": "AWS::ECS::Service",
+   "Properties": {
+    "Cluster": {
+     "Ref": "WorkerClusterB2BB5BD9"
+    },
+    "DeploymentConfiguration": {
+     "Alarms": {
+      "AlarmNames": [],
+      "Enable": false,
+      "Rollback": false
+     },
+     "MaximumPercent": 200,
+     "MinimumHealthyPercent": 50
+    },
+    "DesiredCount": 1,
+    "EnableECSManagedTags": false,
+    "LaunchType": "FARGATE",
+    "NetworkConfiguration": {
+     "AwsvpcConfiguration": {
+      "AssignPublicIp": "ENABLED",
+      "SecurityGroups": [
+       {
+        "Fn::GetAtt": [
+         "WorkerSecurityGroup5529CF0B",
+         "GroupId"
+        ]
+       }
+      ],
+      "Subnets": [
+       {
+        "Ref": "WorkerVpcPublicSubnet1Subnet549B8620"
+       },
+       {
+        "Ref": "WorkerVpcPublicSubnet2Subnet4C3F610E"
+       }
+      ]
+     }
+    },
+    "ServiceName": "receipt-worker-service",
+    "TaskDefinition": {
+     "Ref": "WorkerTaskDefinition8AD2CCFF"
+    }
+   },
+   "DependsOn": [
+    "WorkerTaskDefinitionTaskRoleDefaultPolicyEAEEDD06",
+    "WorkerTaskDefinitionTaskRoleA8028804"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "InfraCdkStack/WorkerService/Service"
+   }
+  },
+  "WorkerServiceTaskCountTarget94398C8F": {
+   "Type": "AWS::ApplicationAutoScaling::ScalableTarget",
+   "Properties": {
+    "MaxCapacity": 10,
+    "MinCapacity": 1,
+    "ResourceId": {
+     "Fn::Join": [
+      "",
+      [
+       "service/",
+       {
+        "Ref": "WorkerClusterB2BB5BD9"
+       },
+       "/",
+       {
+        "Fn::GetAtt": [
+         "WorkerService99815FA9",
+         "Name"
+        ]
+       }
+      ]
+     ]
+    },
+    "RoleARN": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":iam::333208197562:role/aws-service-role/ecs.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_ECSService"
+      ]
+     ]
+    },
+    "ScalableDimension": "ecs:service:DesiredCount",
+    "ServiceNamespace": "ecs"
+   },
+   "DependsOn": [
+    "WorkerTaskDefinitionTaskRoleDefaultPolicyEAEEDD06",
+    "WorkerTaskDefinitionTaskRoleA8028804"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "InfraCdkStack/WorkerService/TaskCount/Target/Resource"
+   }
+  },
+  "WorkerServiceTaskCountTargetSqsBacklogTargetTrackingD2F40976": {
+   "Type": "AWS::ApplicationAutoScaling::ScalingPolicy",
+   "Properties": {
+    "PolicyName": "InfraCdkStackWorkerServiceTaskCountTargetSqsBacklogTargetTracking6392C761",
+    "PolicyType": "TargetTrackingScaling",
+    "ScalingTargetId": {
+     "Ref": "WorkerServiceTaskCountTarget94398C8F"
+    },
+    "TargetTrackingScalingPolicyConfiguration": {
+     "CustomizedMetricSpecification": {
+      "Dimensions": [
+       {
+        "Name": "QueueName",
+        "Value": {
+         "Fn::GetAtt": [
+          "ReceiptsQueue30E2F02B",
+          "QueueName"
+         ]
+        }
+       }
+      ],
+      "MetricName": "ApproximateNumberOfMessagesVisible",
+      "Namespace": "AWS/SQS",
+      "Statistic": "Average"
+     },
+     "TargetValue": 10
+    }
+   },
+   "DependsOn": [
+    "WorkerTaskDefinitionTaskRoleDefaultPolicyEAEEDD06",
+    "WorkerTaskDefinitionTaskRoleA8028804"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "InfraCdkStack/WorkerService/TaskCount/Target/SqsBacklogTargetTracking/Resource"
+   }
+  },
   "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleB6FB88EC": {
    "Type": "AWS::IAM::Role",
    "Properties": {
@@ -319,42 +1019,120 @@
     "aws:cdk:path": "InfraCdkStack/BucketNotificationsHandler050a0587b7544547bf325f094a3db834/Resource"
    }
   },
-  "ReceiptsTable036B344A": {
-   "Type": "AWS::DynamoDB::Table",
+  "WorkerErrorMetricFilter57E8A219": {
+   "Type": "AWS::Logs::MetricFilter",
    "Properties": {
-    "AttributeDefinitions": [
+    "FilterPattern": "?\"ERROR\" ?\"Error\" ?\"Unhandled\"",
+    "LogGroupName": {
+     "Ref": "WorkerLogGroup31FDBE4A"
+    },
+    "MetricTransformations": [
      {
-      "AttributeName": "receipt_id",
-      "AttributeType": "S"
-     },
-     {
-      "AttributeName": "date",
-      "AttributeType": "S"
+      "DefaultValue": 0,
+      "MetricName": "WorkerErrors",
+      "MetricNamespace": "ReceiptProcessing",
+      "MetricValue": "1"
      }
-    ],
-    "BillingMode": "PAY_PER_REQUEST",
-    "KeySchema": [
-     {
-      "AttributeName": "receipt_id",
-      "KeyType": "HASH"
-     },
-     {
-      "AttributeName": "date",
-      "KeyType": "RANGE"
-     }
-    ],
-    "TableName": "Receipts"
+    ]
    },
-   "UpdateReplacePolicy": "Retain",
-   "DeletionPolicy": "Retain",
    "Metadata": {
-    "aws:cdk:path": "InfraCdkStack/ReceiptsTable/Resource"
+    "aws:cdk:path": "InfraCdkStack/WorkerErrorMetricFilter/Resource"
+   }
+  },
+  "ReceiptsQueueBacklogAlarmD9AA2EC3": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "AlarmActions": [
+     {
+      "Ref": "OpsAlertsTopicF77DA89B"
+     }
+    ],
+    "AlarmDescription": "Receipts queue backlog exceeds 50 messages for 5 minutes",
+    "ComparisonOperator": "GreaterThanThreshold",
+    "DatapointsToAlarm": 5,
+    "Dimensions": [
+     {
+      "Name": "QueueName",
+      "Value": {
+       "Fn::GetAtt": [
+        "ReceiptsQueue30E2F02B",
+        "QueueName"
+       ]
+      }
+     }
+    ],
+    "EvaluationPeriods": 5,
+    "MetricName": "ApproximateNumberOfMessagesVisible",
+    "Namespace": "AWS/SQS",
+    "Period": 60,
+    "Statistic": "Average",
+    "Threshold": 50
+   },
+   "Metadata": {
+    "aws:cdk:path": "InfraCdkStack/ReceiptsQueueBacklogAlarm/Resource"
+   }
+  },
+  "WorkerErrorAlarmAEED4951": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "AlarmActions": [
+     {
+      "Ref": "OpsAlertsTopicF77DA89B"
+     }
+    ],
+    "AlarmDescription": "Worker logs contain errors for 5 minutes",
+    "ComparisonOperator": "GreaterThanThreshold",
+    "DatapointsToAlarm": 1,
+    "EvaluationPeriods": 1,
+    "MetricName": "WorkerErrors",
+    "Namespace": "ReceiptProcessing",
+    "Period": 300,
+    "Statistic": "Sum",
+    "Threshold": 0
+   },
+   "Metadata": {
+    "aws:cdk:path": "InfraCdkStack/WorkerErrorAlarm/Resource"
+   }
+  },
+  "ReceiptsBudget": {
+   "Type": "AWS::Budgets::Budget",
+   "Properties": {
+    "Budget": {
+     "BudgetLimit": {
+      "Amount": 2000,
+      "Unit": "INR"
+     },
+     "BudgetName": "ReceiptsBudget",
+     "BudgetType": "COST",
+     "TimeUnit": "MONTHLY"
+    },
+    "NotificationsWithSubscribers": [
+     {
+      "Notification": {
+       "ComparisonOperator": "GREATER_THAN",
+       "NotificationType": "ACTUAL",
+       "Threshold": 100,
+       "ThresholdType": "PERCENTAGE"
+      },
+      "Subscribers": [
+       {
+        "Address": {
+         "Ref": "OpsAlertsTopicF77DA89B"
+        },
+        "SubscriptionType": "SNS"
+       }
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "InfraCdkStack/ReceiptsBudget"
    }
   },
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/02Lyw7CIBBFv6V7OrZ05dZ+gFrdGwo0oQ/QDtg0hH83glo3c8+dOUOB0gqKjC2YczHko2rBXyzjA2EL3jxW4A+OD9KSutMfSnEyo+Lrtk49EHwg+LOTTr5vCeLcHv5qIIpN4BszRj3mJn4dsWo2GdGCv7I2mRFCiE8SjZu5JD+oO3109u5sINoICT3unrSAcg9l1qNS+ey0VZOEJuULcRByeQcBAAA="
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/11SwW7jIBD9lt4J27qnPWa9arXSVs3GUa+rMSbu1Bi8MDSKEP++ApzY6cXz3hsevAFXvKoe+f0dnNxGdMNGYctDQyAGBif3NzjteDiYCQWrj7qAxrdOWJwIjU7qDc9LdkahOF8dhUbmHnn44cUgKbVmVMriWPPI3D/Hwx8vvUy9AvJ3MaxoZN1Zw2i6locDtCqbMohMioqHtynP8bar2c63CkXjW13iLGhvPMmrveiLtnXOCITL8LmRwC9N0mpJz0DyBOf5mJltiUC8j1ITa6TwFun8bI2f8gFrIeV0PNTKO5I2tS/wCWwPKYMbfsojarwk+KoYTYBa2pU2extpP1GUqWbYCFBpqrRJbbymyJTpHQ+/TX9NeMUvkiyKJ1RztjWPDGHkYW/KteW6PNLlfWCaFIp8e+DJOAEKdc/DksP283vcKqUcLIgBdd8U37L/jRCZUMZ3JyDxzsNWgR3Tmgwia33XS3I8/2sJxpxXOuOtkOwK6qN+9TR5ikybTvIP9+2zuucP3/nD3YdD3FivCUfJ96X+BzHnIJ1LAwAA"
    },
    "Metadata": {
     "aws:cdk:path": "InfraCdkStack/CDKMetadata/Default"
